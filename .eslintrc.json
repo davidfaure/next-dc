@@ -1,0 +1,21 @@
+{
+  "root": true,
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "quotes": ["error", "double", { "avoidEscape": true }],
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "func-names": "off",
+    "no-process-exit": "off",
+    "object-shorthand": "off",
+    "class-methods-use-this": "off"
+  },
+  "globals": {
+    "IS_DEVELOPMENT": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020
+  }
+}
