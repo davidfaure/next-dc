@@ -23,7 +23,6 @@
     "prismic-javascript": "^3.0.2",
     "pug": "^3.0.2",
     "request": "^2.88.2",
-    "staticify": "^5.0.0",
     "ua-parser-js": "^1.0.36"
   },
   "devDependencies": {
@@ -74,7 +73,6 @@
     "prefix": "^1.0.0",
     "raw-loader": "^4.0.2",
     "sass-loader": "^13.3.2",
-    "stats.js": "^0.17.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
