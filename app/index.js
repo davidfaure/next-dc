@@ -22,8 +22,8 @@ class App {
     this.content = document.querySelector(".content")
     this.template = this.content.dataset.template
 
-    this.createPreloader()
     this.createCanvas()
+    this.createPreloader()
 
     this.pages = new Map()
     this.pages.set("about", new About())
@@ -38,11 +38,13 @@ class App {
   }
 
   createPreloader() {
-    this.preloader = new Preloader()
+    this.preloader = new Preloader({ canvas: this.canvas })
     this.preloader.on("complete", this.onPreloaded)
   }
 
   onPreloaded() {
+    this.preloader.destroy()
+
     this.onResize()
 
     this.update()
@@ -280,9 +282,9 @@ class App {
   }
 }
 
-const fontNeueHaas = new FontFaceObserver("Neue Haas Grotesk Regular")
+const fontNeueMontreal = new FontFaceObserver("PP Neue Montreal")
 
-Promise.all([fontNeueHaas.load()])
+Promise.all([fontNeueMontreal.load()])
   .then(_ => {
     window.APP = new App()
   })
