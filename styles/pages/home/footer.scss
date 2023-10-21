@@ -1,0 +1,98 @@
+.home__footer {
+  margin: 20rem 10rem 5rem 10rem;
+  min-height: 50rem;
+  display: flex;
+
+  &__title {
+    align-self: flex-end;
+    width: 50%;
+    &__text {
+      @extend %title-160;
+      font-weight: 500;
+      overflow: hidden;
+      display: inline-block;
+    }
+  }
+
+  &__contact {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding-left: 5rem;
+    gap: 5rem;
+
+    &__email__wrapper {
+      display: flex;
+      flex-direction: column;
+      max-width: 50rem;
+      gap: 5rem;
+    }
+
+    &__email {
+      &__text {
+        @extend %text-32;
+        font-weight: 500;
+        line-height: 1;
+      }
+
+      &__input {
+        display: flex;
+        align-items: center;
+        background: #eeeeee;
+        border-radius: 4.3rem;
+        overflow: hidden;
+        padding: 1rem 2rem 1rem 1rem;
+
+        & input {
+          @extend %text-24;
+          font-weight: 500;
+          letter-spacing: 0rem;
+          flex: 1;
+          border: none;
+          border-radius: 4.3rem 0 0 4.3rem;
+          padding: 1rem;
+          &:focus {
+            outline: none;
+          }
+        }
+
+        &__icon {
+          width: 3.5rem;
+          height: 3.5rem;
+        }
+      }
+    }
+
+    &__link__wrapper {
+      display: flex;
+      justify-content: space-between;
+      max-width: 50rem;
+      @extend %text-24;
+      font-weight: 500;
+      letter-spacing: 0rem;
+      padding-bottom: 1.5rem;
+    }
+
+    &__link {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+
+      &__link__text {
+        @extend %link--hidden;
+      }
+    }
+
+    &__socials {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 2.5rem;
+
+      &__link__text {
+        @extend %link--hidden;
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
-import Prefix from 'prefix'
+import Prefix from "prefix"
 
 export default class {
-  constructor ({ element, elements }) {
+  constructor({ element, elements }) {
     const { animationDelay, animationTarget } = element.dataset
 
     this.delay = animationDelay
@@ -10,34 +10,43 @@ export default class {
     this.elements = elements
 
     this.target = animationTarget ? element.closest(animationTarget) : element
-    this.transformPrefix = Prefix('transform')
+    this.transformPrefix = Prefix("transform")
 
     this.isVisible = false
 
-    if ('IntersectionObserver' in window) {
-      this.createObserver()
+    this.createObserver()
 
-      this.animateOut()
-    } else {
-      this.animateIn()
-    }
+    this.animateOut()
+
+    // if ('IntersectionObserver' in window) {
+    //   this.createObserver()
+
+    //   this.animateOut()
+    // } else {
+    //   this.animateIn()
+    // }
   }
 
-  createObserver () {
-    this.observer = new window.IntersectionObserver((entries) => {
+  createObserver() {
+    this.observer = new window.IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (!this.isVisible && entry.isIntersecting) {
+        // if (!this.isVisible && entry.isIntersecting) {
+        //   this.animateIn()
+        // }
+        if (entry.isIntersecting) {
           this.animateIn()
+        } else {
+          this.animateOut()
         }
       })
     }).observe(this.target)
   }
 
-  animateIn () {
+  animateIn() {
     this.isVisible = true
   }
 
-  animateOut () {
+  animateOut() {
     this.isVisible = false
   }
 }

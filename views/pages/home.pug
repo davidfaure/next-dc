@@ -6,4 +6,51 @@ block variables
 block body
   .home
     .home__content
-      | Lorem ipsum dolor sit amet.
+      section.home__hero
+        h1.home__hero__title=data.hero.title
+        span.home__hero__scroll (Scroll)
+      section.home__description
+          .home__description__box
+            figure.home__description__media(data-animation="parallax")
+              .home__description__media__wrapper
+                img.home__description__media__image(src=data.description.image alt=data.description.text)
+            .home__description__box__text
+              p.home__description__box__text__text(data-animation="paragraph")=data.description.text
+              .home__description__button
+                button.home__description__button__wrapper
+                  p.home__description__button__text
+                    span.home__description__button__text__text See More
+                  p.home__description__button__icon
+                    span.home__description__button__icon__image +
+      section.home__gallery
+        .home__gallery__wrapper
+          each image, index in data.gallery
+            .home__gallery__media__wrapper
+              figure.home__gallery__media(data-index=image.id)
+                img.home__gallery__media__image(alt=image.title, src=image.image)
+              .home__gallery__media__description
+                span.home__gallery__media__description__subtitle=image.subTitle
+                p.home__gallery__media__description__title=image.title
+      section.home__quote
+        h1.home__quote__title(data-animation="reveal")=data.quote
+      section.home__footer
+        .home__footer__title
+          h1.home__footer__title__text(data-animation="paragraph") JARDEN
+        .home__footer__contact
+          .home__footer__contact__email__wrapper
+            p.home__footer__contact__email__text(data-animation="paragraph")=data.footer.text
+            .home__footer__contact__email__input
+              input(type="email" placeholder="Email")
+              svg.home__footer__contact__email__input__icon(width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg")
+                path(opacity="0.3" d="M0.00012207 24V15L11.7896 12L0.00012207 9V0L28.0001 12L0.00012207 24Z" fill="black")
+          .home__footer__contact__link__wrapper
+            ul.home__footer__contact__link
+              each link in data.footer.link
+                a.home__footer__contact__link__link(href=link.href)
+                  li.home__footer__contact__link__link__text(data-animation="paragraph")=link.text
+            ul.home__footer__contact__socials
+              each link in data.footer.socials
+                a.home__footer__contact__socials__link(href=link.href)
+                  li.home__footer__contact__socials__link__text(data-animation="paragraph")=link.text
+  .progress
+    .progress__bar

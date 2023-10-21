@@ -1,14 +1,15 @@
-import Page from 'components/Page'
+import Page from "components/Page"
 
 export default class extends Page {
-  constructor () {
+  constructor() {
     super({
       classes: {
-        active: 'home--active',
+        active: "home--active"
       },
-      element: '.home',
+      element: ".home",
       elements: {
-        wrapper: '.home__content',
+        wrapper: ".home__content",
+        scroll: document.querySelector(".progress__bar")
       }
     })
   }
@@ -16,13 +17,13 @@ export default class extends Page {
   /**
    * Animations.
    */
-  async show (url) {
+  async show(url) {
     this.element.classList.add(this.classes.active)
 
     return super.show(url)
   }
 
-  async hide (url) {
+  async hide(url) {
     this.element.classList.remove(this.classes.active)
 
     return super.hide(url)

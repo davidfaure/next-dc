@@ -1,19 +1,20 @@
-import AutoBind from 'auto-bind'
-import EventEmitter from 'events'
-import NormalizeWheel from 'normalize-wheel'
-import Prefix from 'prefix'
+import AutoBind from "auto-bind"
+import EventEmitter from "events"
+import NormalizeWheel from "normalize-wheel"
+import Prefix from "prefix"
 
-import Paragraph from 'animations/Paragraph'
+import Paragraph from "animations/Paragraph"
+import Reveal from "animations/Reveal"
 
-import Detection from 'classes/Detection'
+import Detection from "classes/Detection"
 
-import each from 'lodash/each'
+import each from "lodash/each"
 
-import { mapEach } from 'utils/dom'
-import { clamp, lerp } from 'utils/math'
+import { mapEach } from "utils/dom"
+import { clamp, lerp } from "utils/math"
 
 export default class extends EventEmitter {
-  constructor ({ classes, element, elements, isScrollable = true }) {
+  constructor({ classes, element, elements, isScrollable = true }) {
     super()
 
     AutoBind(this)
@@ -26,6 +27,7 @@ export default class extends EventEmitter {
       element,
       elements: {
         animationsParagraphs: '[data-animation="paragraph"]',
+        animationsReveal: '[data-animation="reveal"]',
 
         ...elements
       }
@@ -41,10 +43,10 @@ export default class extends EventEmitter {
 
     this.isScrollable = isScrollable
 
-    this.transformPrefix = Prefix('transform')
+    this.transformPrefix = Prefix("transform")
   }
 
-  create () {
+  create() {
     this.animations = []
 
     this.element = document.querySelector(this.selectors.element)
@@ -82,18 +84,24 @@ export default class extends EventEmitter {
   /**
    * Animations.
    */
-  createAnimations () {
+  createAnimations() {
     this.paragraphs = mapEach(this.elements.animationsParagraphs, element => {
       return new Paragraph({ element })
     })
 
     this.animations.push(...this.paragraphs)
+
+    this.revealsText = mapEach(this.elements.animationsReveal, element => {
+      return new Reveal({ element })
+    })
+
+    this.animations.push(...this.revealsText)
   }
 
   /**
    * Animations.
    */
-  reset () {
+  reset() {
     this.scroll = {
       ease: 0.07,
       position: 0,
@@ -103,32 +111,32 @@ export default class extends EventEmitter {
     }
   }
 
-  set (value) {
+  set(value) {
     this.scroll.current = this.scroll.target = this.scroll.last = value
 
     this.transform(this.elements.wrapper, this.scroll.current)
   }
 
-  show (url) {
+  show(url) {
     this.isVisible = true
 
     return Promise.resolve()
   }
 
-  hide (url) {
+  hide(url) {
     this.isVisible = false
 
     return Promise.resolve()
   }
 
-  transform (element, y) {
+  transform(element, y) {
     element.style[this.transformPrefix] = `translate3d(0, ${-Math.round(y)}px, 0)`
   }
 
   /**
    * Events.
    */
-  onResize () {
+  onResize() {
     if (!this.elements.wrapper) return
 
     window.requestAnimationFrame(_ => {
@@ -140,7 +148,7 @@ export default class extends EventEmitter {
     })
   }
 
-  onTouchDown (event) {
+  onTouchDown(event) {
     if (!Detection.isMobile()) return
 
     this.isDown = true
@@ -149,7 +157,7 @@ export default class extends EventEmitter {
     this.start = event.touches ? event.touches[0].clientY : event.clientY
   }
 
-  onTouchMove (event) {
+  onTouchMove(event) {
     if (!Detection.isMobile() || !this.isDown) return
 
     const y = event.touches ? event.touches[0].clientY : event.clientY
@@ -158,13 +166,13 @@ export default class extends EventEmitter {
     this.scroll.target = this.scroll.position + distance
   }
 
-  onTouchUp (event) {
+  onTouchUp(event) {
     if (!Detection.isMobile()) return
 
     this.isDown = false
   }
 
-  onWheel (event) {
+  onWheel(event) {
     const normalized = NormalizeWheel(event)
     const speed = normalized.pixelY
 
@@ -176,7 +184,7 @@ export default class extends EventEmitter {
   /**
    * Frames.
    */
-  update () {
+  update() {
     this.scroll.target = clamp(0, this.scroll.limit, this.scroll.target)
 
     this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease)
@@ -184,6 +192,11 @@ export default class extends EventEmitter {
 
     if (this.scroll.current < 0.1) {
       this.scroll.current = 0
+    }
+
+    if (this.selectors.elements.scroll) {
+      this.scrollPercentage = this.scroll.current / this.scroll.limit
+      this.elements.scroll.style[this.transformPrefix] = `scaleY(${this.scrollPercentage})`
     }
 
     if (this.elements.wrapper) {
