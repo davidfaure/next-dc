@@ -1,13 +1,46 @@
 .preloader {
+  @extend %flex-center;
   @extend %cover;
 
-  background: $color-white;
-  overflow: hidden;
-  position: fixed;
-  transform-origin: 0 0;
-  z-index: z('preloader');
+  background: $color-green;
+  color: $color-white;
+  // overflow: hidden;
+  // position: fixed;
+  text-align: center;
+  z-index: z("preloader");
 
   &--loaded {
     transform: scaleY(0);
+  }
+
+  &__text {
+    @extend %title-60;
+    font-weight: 500;
+    opacity: 0;
+
+    span {
+      overflow: hidden;
+      display: inline-block;
+      white-space: pre-line;
+    }
+
+    span span {
+      transform-origin: center center 0.5em;
+      white-space: pre-line;
+    }
+  }
+
+  &__number {
+    @extend %text-16;
+
+    bottom: 6rem;
+    left: 50%;
+    overflow: hidden;
+    position: absolute;
+    transform: translateX(-50%);
+
+    &__text {
+      display: inline-block;
+    }
   }
 }
