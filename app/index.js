@@ -15,6 +15,7 @@ import Home from "pages/Home"
 import Canvas from "components/Canvas"
 import Preloader from "components/Preloader"
 import Cursor from "./classes/Cursor"
+import Navigation from "./components/Navigation"
 
 class App {
   constructor() {
@@ -26,6 +27,7 @@ class App {
 
     this.createCanvas()
     this.createCursor()
+    this.createNavigation()
     this.createPreloader()
 
     this.pages = new Map()
@@ -42,6 +44,10 @@ class App {
 
   createCursor() {
     this.cursor = new Cursor({ cursor: this.cursor, template: this.template })
+  }
+
+  createNavigation() {
+    this.navigation = new Navigation()
   }
 
   createPreloader() {

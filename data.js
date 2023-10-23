@@ -76,4 +76,10 @@ const data = {
   }
 }
 
-module.exports = { data }
+const topStartString = "9 14.5 25 14.5 25 15.5 9 15.5 9 15"
+const topEndString = "11.7 11 23 22.3 22.3 23 11 11.7 11.3 11.4"
+
+const bottomStartString = "9 18.5 25 18.5 25 19.5 9 19.5 9 19"
+const bottomEndString = "11 22.3 22.3 11 23 11.7 11.7 23 11.3 22.7"
+
+module.exports = { data, topStartString, topEndString, bottomStartString, bottomEndString }
