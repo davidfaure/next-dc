@@ -49,8 +49,6 @@ export default class extends Animation {
   animateIn() {
     super.animateIn()
 
-    console.log("ANIMATE IN", this.elements.lines)
-
     gsap.to(this.elements.lines, {
       opacity: 1,
       stagger: 0.02, // This will delay the animation of each letter, creating a cascading effect
@@ -62,8 +60,6 @@ export default class extends Animation {
 
   animateOut() {
     super.animateOut()
-
-    console.log("ANIMATE OUT", this.elements.lines)
 
     gsap.to(this.elements.lines, {
       opacity: 0.1,

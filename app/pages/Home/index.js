@@ -9,7 +9,8 @@ export default class extends Page {
       element: ".home",
       elements: {
         wrapper: ".home__content",
-        scroll: document.querySelector(".progress__bar")
+        scroll: document.querySelector(".progress__bar"),
+        gallery: document.querySelectorAll(".home__gallery")
       }
     })
   }
