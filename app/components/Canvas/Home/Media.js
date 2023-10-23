@@ -57,6 +57,7 @@ export default class {
     })
 
     this.mesh.setParent(this.scene)
+    this.mesh.position.z -= 0.01
   }
 
   createTitle() {

@@ -250,6 +250,10 @@ class App {
     if (this.cursor && this.cursor.handleCursorMove) {
       this.cursor.handleCursorMove(event)
     }
+
+    if (this.canvas && this.canvas.onTouchUp) {
+      this.canvas.onMouseMove(event)
+    }
   }
 
   /**

@@ -15,3 +15,8 @@ export function random(min, max) {
 export function map(valueToMap, inMin, inMax, outMin, outMax) {
   return GSAP.utils.mapRange(inMin, inMax, outMin, outMax, valueToMap)
 }
+
+export function randomize(a, b) {
+  const alpha = Math.random()
+  return a * (1.0 - alpha) + b * alpha
+}

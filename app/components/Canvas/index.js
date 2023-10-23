@@ -1,5 +1,6 @@
 import { Box, Camera, Renderer, Transform, Program, Mesh } from "ogl"
 import Home from "./Home"
+import Cursor from "./Cursor"
 
 export default class {
   constructor({ url }) {
@@ -30,6 +31,7 @@ export default class {
 
     this.createCamera()
     this.createScene()
+    this.createCursor()
 
     this.onResize()
   }
@@ -42,6 +44,16 @@ export default class {
 
   createScene() {
     this.scene = new Transform()
+  }
+
+  createCursor() {
+    this.webglCursor = new Cursor({
+      gl: this.gl,
+      scene: this.scene,
+      sizes: this.viewport,
+      renderer: this.renderer,
+      camera: this.camera
+    })
   }
 
   createHome() {
@@ -114,6 +126,12 @@ export default class {
         sizes: this.viewport
       })
     }
+
+    if (this.webglCursor) {
+      this.webglCursor.onResize({
+        sizes: this.viewport
+      })
+    }
   }
 
   onTouchDown(event) {
@@ -170,6 +188,32 @@ export default class {
     }
   }
 
+  onMouseMove(event) {
+    // if (event.changedTouches && event.changedTouches.length) {
+    //   event.x = event.changedTouches[0].pageX
+    //   event.y = event.changedTouches[0].pageY
+    // }
+    // if (event.x === undefined) {
+    //   event.x = event.pageX
+    //   event.y = event.pageY
+    // }
+
+    const x = event.touches ? event.touches[0].clientX : event.clientX
+    const y = event.touches ? event.touches[0].clientY : event.clientY
+
+    this.x.end = x
+    this.y.end = y
+
+    const values = {
+      x: this.x,
+      y: this.y
+    }
+
+    if (this.webglCursor) {
+      this.webglCursor.onMouseMove(values)
+    }
+  }
+
   /**
    * Update.
    */
@@ -178,6 +222,10 @@ export default class {
 
     if (this.home) {
       this.home.update(scroll)
+    }
+
+    if (this.webglCursor) {
+      this.webglCursor.update()
     }
 
     this.renderer.render({
