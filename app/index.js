@@ -137,7 +137,7 @@ class App {
     }
 
     if (this.page) {
-      this.page.update()
+      this.page.update(this.page.scroll)
     }
 
     if (this.canvas) {

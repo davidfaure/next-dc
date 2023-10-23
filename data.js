@@ -5,7 +5,7 @@ const data = {
   },
   description: {
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-    image: "/img/quote.jpg"
+    image: "/img/main.jpg"
   },
   gallery: [
     {
@@ -33,7 +33,10 @@ const data = {
       subTitle: "350ml"
     }
   ],
-  quote: "We true believe in the future food habits",
+  quote: {
+    text: "We true believe in the future food habits",
+    image: "/img/quote.jpg"
+  },
   footer: {
     text: "Sorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
     link: [

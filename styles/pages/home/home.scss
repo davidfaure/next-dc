@@ -109,18 +109,41 @@
     }
   }
   &__quote {
-    margin: 40rem 30rem;
+    // margin: 5rem 0rem;
     @extend %flex-center;
+    position: relative;
+    width: 100vw;
+    height: 100rem;
+
+    &__media {
+      overflow: hidden;
+      position: absolute;
+      z-index: 1;
+      width: 80rem;
+      height: 50rem;
+      width: 100%;
+      height: 100%;
+
+      &__image {
+        @extend %cover;
+
+        transform: scale(0.2);
+        will-change: transform;
+        object-fit: cover;
+      }
+    }
 
     &__title {
       text-align: center;
       @extend %title-160;
-      color: $color-green;
+      color: $color-white;
       font-weight: 500;
       overflow: hidden;
       display: inline-block;
       white-space: pre-line;
       overflow-wrap: normal;
+      position: absolute;
+      z-index: 2;
 
       & span {
         display: inline-block;

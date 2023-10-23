@@ -204,5 +204,9 @@ export default class extends EventEmitter {
     }
 
     this.scroll.last = this.scroll.current
+
+    if (this.home) {
+      console.log("ICI")
+    }
   }
 }
