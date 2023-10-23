@@ -25,14 +25,12 @@ block body
       section.home__gallery
         .home__gallery__wrapper
           each image, index in data.gallery
-            .home__gallery__media__wrapper
-              figure.home__gallery__media(data-index=image.id)
-                img.home__gallery__media__image(alt=image.title, src=image.image)
-              .home__gallery__media__description
-                span.home__gallery__media__description__subtitle=image.subTitle
-                p.home__gallery__media__description__title=image.title
-      section.home__quote
-        h1.home__quote__title(data-animation="reveal")=data.quote
+            figure.home__gallery__media(data-index=image.id)
+              img.home__gallery__media__image(alt=image.title, src=image.image)
+      section.home__quote(data-animation="scale")
+        h1.home__quote__title(data-animation="reveal")=data.quote.text
+        figure.home__quote__media
+          img.home__quote__media__image(alt=data.quote.text, src=data.quote.image)
       section.home__footer
         .home__footer__title
           h1.home__footer__title__text(data-animation="paragraph") JARDEN

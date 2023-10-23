@@ -1,11 +1,26 @@
-import { Box, Camera, Plane, Renderer, Transform } from 'ogl'
+import { Box, Camera, Renderer, Transform, Program, Mesh } from "ogl"
+import Home from "./Home"
+import Cursor from "./Cursor"
 
 export default class {
-  constructor ({ url }) {
+  constructor({ url }) {
     this.url = url
+
+    this.x = {
+      start: 0,
+      distance: 0,
+      end: 0
+    }
+
+    this.y = {
+      start: 0,
+      distance: 0,
+      end: 0
+    }
 
     this.renderer = new Renderer({
       alpha: true,
+      antialias: true,
       dpr: Math.min(window.devicePixelRatio, 2)
     })
 
@@ -16,44 +31,71 @@ export default class {
 
     this.createCamera()
     this.createScene()
-    this.createGeometries()
+    this.createCursor()
 
     this.onResize()
   }
 
-  createCamera () {
+  createCamera() {
     this.camera = new Camera(this.gl)
     this.camera.fov = 45
     this.camera.position.z = 5
   }
 
-  createScene () {
+  createScene() {
     this.scene = new Transform()
   }
 
-  createGeometries () {
-    this.boxGeometry = new Box(this.gl, {
-      heightSegments: 20,
-      widthSegments: 1
+  createCursor() {
+    this.webglCursor = new Cursor({
+      gl: this.gl,
+      scene: this.scene,
+      sizes: this.viewport,
+      renderer: this.renderer,
+      camera: this.camera
     })
+  }
 
-    this.planeGeometry = new Plane(this.gl, {
-      heightSegments: 20,
-      widthSegments: 1
+  createHome() {
+    this.home = new Home({
+      gl: this.gl,
+      scene: this.scene,
+      sizes: this.viewport,
+      renderer: this.renderer,
+      camera: this.camera
     })
+  }
+
+  destroyHome() {
+    if (!this.home) return
+    this.home.destroy()
+    this.home = null
+  }
+
+  onPreloaded() {
+    this.onChangeEnd(this.url)
+  }
+
+  onChangeEnd(url) {
+    console.log(url, "url")
+    if (url === "home") {
+      this.createHome()
+    } else {
+      this.destroyHome()
+    }
+
+    this.url = url
   }
 
   /**
    * Change.
    */
-  onChange (url) {
-
-  }
+  onChange(url) {}
 
   /**
    * Resize.
    */
-  onResize () {
+  onResize() {
     this.screen = {
       height: window.innerHeight,
       width: window.innerWidth
@@ -78,25 +120,113 @@ export default class {
       screen: this.screen,
       viewport: this.viewport
     }
+
+    if (this.home) {
+      this.home.onResize({
+        sizes: this.viewport
+      })
+    }
+
+    if (this.webglCursor) {
+      this.webglCursor.onResize({
+        sizes: this.viewport
+      })
+    }
   }
 
-  onTouchDown (event) {
+  onTouchDown(event) {
+    this.isDown = true
 
+    this.x.start = event.touches ? event.touches[0].clientX : event.clientX
+    this.y.start = event.touches ? event.touches[0].clientY : event.clientY
+
+    const values = {
+      x: this.x.start,
+      y: this.y.start
+    }
+
+    if (this.home) {
+      this.home.onTouchDown(values)
+    }
   }
 
-  onTouchMove (event) {
+  onTouchMove(event) {
+    if (!this.isDown) return
 
+    const x = event.touches ? event.touches[0].clientX : event.clientX
+    const y = event.touches ? event.touches[0].clientY : event.clientY
+
+    this.x.end = x
+    this.y.end = y
+
+    const values = {
+      x: this.x,
+      y: this.y
+    }
+
+    if (this.home) {
+      this.home.onTouchMove(values)
+    }
   }
 
-  onTouchUp (event) {
+  onTouchUp(event) {
+    this.isDown = false
 
+    const x = event.changedTouches ? event.changedTouches[0].clientX : event.clientX
+    const y = event.changedTouches ? event.changedTouches[0].clientY : event.clientY
+
+    this.x.end = x
+    this.y.end = y
+
+    const values = {
+      x: this.x,
+      y: this.y
+    }
+
+    if (this.home) {
+      this.home.onTouchUp(values)
+    }
+  }
+
+  onMouseMove(event) {
+    // if (event.changedTouches && event.changedTouches.length) {
+    //   event.x = event.changedTouches[0].pageX
+    //   event.y = event.changedTouches[0].pageY
+    // }
+    // if (event.x === undefined) {
+    //   event.x = event.pageX
+    //   event.y = event.pageY
+    // }
+
+    const x = event.touches ? event.touches[0].clientX : event.clientX
+    const y = event.touches ? event.touches[0].clientY : event.clientY
+
+    this.x.end = x
+    this.y.end = y
+
+    const values = {
+      x: this.x,
+      y: this.y
+    }
+
+    if (this.webglCursor) {
+      this.webglCursor.onMouseMove(values)
+    }
   }
 
   /**
    * Update.
    */
-  update (application) {
+  update(application, scroll) {
     if (!application) return
+
+    if (this.home) {
+      this.home.update(scroll)
+    }
+
+    if (this.webglCursor) {
+      this.webglCursor.update()
+    }
 
     this.renderer.render({
       scene: this.scene,

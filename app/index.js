@@ -14,15 +14,20 @@ import Home from "pages/Home"
 
 import Canvas from "components/Canvas"
 import Preloader from "components/Preloader"
+import Cursor from "./classes/Cursor"
+import Navigation from "./components/Navigation"
 
 class App {
   constructor() {
     AutoBind(this)
 
     this.content = document.querySelector(".content")
+    this.cursor = document.getElementById("cursor")
     this.template = this.content.dataset.template
 
     this.createCanvas()
+    this.createCursor()
+    this.createNavigation()
     this.createPreloader()
 
     this.pages = new Map()
@@ -37,12 +42,22 @@ class App {
     this.addLinksEventsListeners()
   }
 
+  createCursor() {
+    this.cursor = new Cursor({ cursor: this.cursor, template: this.template })
+  }
+
+  createNavigation() {
+    this.navigation = new Navigation()
+  }
+
   createPreloader() {
     this.preloader = new Preloader({ canvas: this.canvas })
     this.preloader.on("complete", this.onPreloaded)
   }
 
   onPreloaded() {
+    this.canvas.onPreloaded()
+
     this.preloader.destroy()
 
     this.onResize()
@@ -52,7 +67,7 @@ class App {
 
   createCanvas() {
     this.canvas = new Canvas({
-      url: this.url
+      url: this.template
     })
   }
 
@@ -128,11 +143,11 @@ class App {
     }
 
     if (this.page) {
-      this.page.update()
+      this.page.update(this.page.scroll)
     }
 
     if (this.canvas) {
-      this.canvas.update(this)
+      this.canvas.update(this, this.page.scroll)
     }
 
     if (this.stats) {
@@ -231,10 +246,24 @@ class App {
     }
   }
 
+  onMouseMove(event) {
+    if (this.cursor && this.cursor.handleCursorMove) {
+      this.cursor.handleCursorMove(event)
+    }
+
+    if (this.canvas && this.canvas.onTouchUp) {
+      this.canvas.onMouseMove(event)
+    }
+  }
+
   /**
    * Listeners.
    */
   addEventListeners() {
+    // document.addEventListener("mouseover", function (event) {
+    //   console.log("mouseover", event.target)
+    // })
+
     window.addEventListener("popstate", this.onPopState, { passive: true })
     window.addEventListener("resize", this.onResize, { passive: true })
 
@@ -251,6 +280,8 @@ class App {
 
     window.addEventListener("keydown", this.onKeyDown)
     window.addEventListener("focusin", this.onFocusIn)
+
+    window.addEventListener("mousemove", this.onMouseMove)
 
     if (Detection.isMobile()) {
       window.oncontextmenu = this.onContextMenu

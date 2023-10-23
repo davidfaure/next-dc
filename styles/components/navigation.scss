@@ -5,6 +5,67 @@
   pointer-events: none;
   z-index: z("navigation");
 
+  &__expanded {
+    position: absolute;
+    z-index: -1;
+    background-color: $color-white;
+    color: $color-black;
+    border-radius: 4rem;
+    padding: 0.8rem;
+    width: 22rem;
+    height: 7rem;
+    will-change: width height position;
+
+    &__wrapper {
+      position: relative;
+      margin: 0 auto;
+      width: 100vw;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+
+      &__menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        &__li {
+          &__wrapper {
+            padding: 5rem;
+          }
+          &__no {
+            float: left;
+            overflow: hidden;
+            will-change: transform;
+            margin-top: 1rem;
+
+            &__wrap {
+              @extend %text-16;
+              font-weight: 500;
+              opacity: 1;
+            }
+          }
+
+          &__name {
+            float: left;
+            overflow: hidden;
+            padding-left: 2rem;
+            opacity: 1;
+            @extend %title-80;
+            font-weight: 500;
+
+            &__wrap {
+              float: left;
+            }
+          }
+        }
+      }
+    }
+  }
+
   &__wrapper {
     margin: 6rem;
     display: flex;
@@ -40,6 +101,7 @@
         width: 5rem;
         height: 5rem;
         fill: $color-black;
+        z-index: 2;
       }
     }
   }
@@ -61,11 +123,11 @@
 
       &::after {
         content: "(0)";
-        font-size: 1rem; // Set font size to your preference
+        font-size: 1rem;
         position: absolute;
         top: 1rem;
         right: -1.3rem;
-        transform: translateY(-100%); // This ensures it's above the text
+        transform: translateY(-100%);
       }
     }
 

@@ -38,7 +38,6 @@ export default class extends Animation {
         lines
       }
     })
-    this.wrapper = document.querySelector(".home__quote")
     this.onResize()
 
     if ("IntersectionObserver" in window) {
@@ -49,11 +48,10 @@ export default class extends Animation {
   animateIn() {
     super.animateIn()
 
-    console.log("ANIMATE IN", this.elements.lines)
-
-    gsap.to(this.elements.lines, {
+    this.timeline = gsap.timeline()
+    this.timeline.to(this.elements.lines, {
       opacity: 1,
-      stagger: 0.02, // This will delay the animation of each letter, creating a cascading effect
+      stagger: 0.02,
       duration: 0.2,
       ease: "power2.out",
       delay: 0.2
@@ -62,8 +60,6 @@ export default class extends Animation {
 
   animateOut() {
     super.animateOut()
-
-    console.log("ANIMATE OUT", this.elements.lines)
 
     gsap.to(this.elements.lines, {
       opacity: 0.1,

@@ -5,7 +5,7 @@ const data = {
   },
   description: {
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-    image: "/img/quote.jpg"
+    image: "/img/main.jpg"
   },
   gallery: [
     {
@@ -33,7 +33,10 @@ const data = {
       subTitle: "350ml"
     }
   ],
-  quote: "We true believe in the future food habits",
+  quote: {
+    text: "We true believe in the future food habits",
+    image: "/img/quote.jpg"
+  },
   footer: {
     text: "Sorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
     link: [
@@ -73,4 +76,20 @@ const data = {
   }
 }
 
-module.exports = { data }
+const topStartString = "9 14.5 25 14.5 25 15.5 9 15.5 9 15"
+const topEndString = "11.7 11 23 22.3 22.3 23 11 11.7 11.3 11.4"
+
+const bottomStartString = "9 18.5 25 18.5 25 19.5 9 19.5 9 19"
+const bottomEndString = "11 22.3 22.3 11 23 11.7 11.7 23 11.3 22.7"
+
+// const cursorColor = ["#2baf50", "#8a2be2", "#000", "#ff91a4"]
+const cursorColor = ["#1b6b32", "#8a2be2", "#000", "#ff91a4"]
+
+module.exports = {
+  data,
+  topStartString,
+  topEndString,
+  bottomStartString,
+  bottomEndString,
+  cursorColor
+}

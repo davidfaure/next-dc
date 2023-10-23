@@ -6,7 +6,7 @@ const { data } = require("./data")
 const handlePreloader = () => {
   const assets = []
 
-  assets.push(data.hero.image, data.description.image)
+  assets.push(data.hero.image, data.description.image, data.quote.image)
   data.gallery.forEach(img => {
     const { image } = img
     assets.push(image)
