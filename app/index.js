@@ -21,14 +21,14 @@ class App {
   constructor() {
     AutoBind(this)
 
-    this.content = document.querySelector(".content")
     this.cursor = document.getElementById("cursor")
+    this.content = document.querySelector(".content")
     this.template = this.content.dataset.template
 
     this.createCanvas()
     this.createCursor()
-    this.createNavigation()
     this.createPreloader()
+    this.createNavigation()
 
     this.pages = new Map()
     this.pages.set("about", new About())
@@ -36,7 +36,6 @@ class App {
 
     this.page = this.pages.get(this.template)
     this.page.create()
-    this.page.show()
 
     this.addEventListeners()
     this.addLinksEventsListeners()
@@ -56,11 +55,11 @@ class App {
   }
 
   onPreloaded() {
+    this.page.show()
     this.canvas.onPreloaded()
+    this.onResize()
 
     this.preloader.destroy()
-
-    this.onResize()
 
     this.update()
   }
@@ -260,10 +259,6 @@ class App {
    * Listeners.
    */
   addEventListeners() {
-    // document.addEventListener("mouseover", function (event) {
-    //   console.log("mouseover", event.target)
-    // })
-
     window.addEventListener("popstate", this.onPopState, { passive: true })
     window.addEventListener("resize", this.onResize, { passive: true })
 

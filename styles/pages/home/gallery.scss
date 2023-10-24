@@ -2,16 +2,15 @@
   height: 80rem;
   margin: 20rem 0;
   overflow: hidden;
-  pointer-events: none;
   position: relative;
+  background-color: $color-white;
 
   &__wrapper {
     align-items: center;
     display: flex;
-    // left: 50%;
     position: absolute;
     top: 50%;
-    transform: translate(0%, -50%); // half of the image width + padding
+    transform: translate(0%, -50%);
     overflow: hidden;
   }
 

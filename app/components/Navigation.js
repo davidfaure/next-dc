@@ -1,8 +1,8 @@
 import gsap from "gsap"
+import { each } from "lodash"
 import { SMOOTH } from "../utils/easings"
 
 import { bottomStartString, bottomEndString, topStartString, topEndString } from "../../data"
-import { each } from "lodash"
 
 export default class Navigation {
   constructor() {

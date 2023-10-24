@@ -5,8 +5,7 @@ import Prefix from "prefix"
 
 import Paragraph from "animations/Paragraph"
 import Reveal from "animations/Reveal"
-
-import Detection from "classes/Detection"
+import Parallax from "animations/Parallax"
 
 import each from "lodash/each"
 
@@ -28,6 +27,7 @@ export default class extends EventEmitter {
       elements: {
         animationsParagraphs: '[data-animation="paragraph"]',
         animationsReveal: '[data-animation="reveal"]',
+        animationsParallax: '[data-animation="parallax"]',
 
         ...elements
       }
@@ -44,6 +44,7 @@ export default class extends EventEmitter {
     this.isScrollable = isScrollable
 
     this.transformPrefix = Prefix("transform")
+    console.log()
   }
 
   create() {
@@ -96,6 +97,12 @@ export default class extends EventEmitter {
     })
 
     this.animations.push(...this.revealsText)
+
+    this.parallaxEffects = mapEach(this.elements.animationsParallax, element => {
+      return new Parallax({ element })
+    })
+
+    this.animations.push(...this.parallaxEffects)
   }
 
   /**
@@ -149,8 +156,6 @@ export default class extends EventEmitter {
   }
 
   onTouchDown(event) {
-    if (!Detection.isMobile()) return
-
     this.isDown = true
 
     this.scroll.position = this.scroll.current
@@ -158,7 +163,7 @@ export default class extends EventEmitter {
   }
 
   onTouchMove(event) {
-    if (!Detection.isMobile() || !this.isDown) return
+    if (!this.isDown) return
 
     const y = event.touches ? event.touches[0].clientY : event.clientY
     const distance = (this.start - y) * 3
@@ -167,8 +172,6 @@ export default class extends EventEmitter {
   }
 
   onTouchUp(event) {
-    if (!Detection.isMobile()) return
-
     this.isDown = false
   }
 
@@ -204,9 +207,10 @@ export default class extends EventEmitter {
     }
 
     this.scroll.last = this.scroll.current
-
-    if (this.home) {
-      console.log("ICI")
+    if (this.parallaxEffects) {
+      each(this.parallaxEffects, effect => {
+        effect.update(this.scroll.current)
+      })
     }
   }
 }

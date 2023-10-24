@@ -1,14 +1,14 @@
-import Page from 'components/Page'
+import Page from "components/Page"
 
 export default class extends Page {
-  constructor () {
+  constructor() {
     super({
       classes: {
-        active: 'about--active',
+        active: "about--active"
       },
-      element: '.about',
+      element: ".about",
       elements: {
-        wrapper: '.about__content',
+        wrapper: ".about__content"
       }
     })
   }
@@ -16,13 +16,13 @@ export default class extends Page {
   /**
    * Animations.
    */
-  async show (url) {
+  async show(url) {
     this.element.classList.add(this.classes.active)
 
     return super.show(url)
   }
 
-  async hide (url) {
+  async hide(url) {
     this.element.classList.remove(this.classes.active)
 
     return super.hide(url)

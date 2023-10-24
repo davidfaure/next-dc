@@ -1,4 +1,4 @@
-import { Polyline, Transform, Vec3, Color } from "ogl"
+import { Polyline, Vec3, Color } from "ogl"
 
 import vertex from "../../../shaders/cursor-vertex.glsl"
 import { cursorColor } from "../../../../data"
@@ -13,8 +13,6 @@ export default class {
     this.renderer = renderer
     this.camera = camera
 
-    this.spring = 0.06
-    this.friction = 0.85
     this.count = 20
     this.lines = []
     this.mouseVelocity = new Vec3()
@@ -26,13 +24,12 @@ export default class {
   }
 
   createPolyline() {
-    // this.gl.disable(this.gl.DEPT_TEST)
     each(cursorColor, (color, i) => {
       const line = {
-        spring: randomize(0.02, 0.1),
+        spring: randomize(0.02, 0.06),
         friction: randomize(0.7, 0.95),
         mouseVelocity: new Vec3(),
-        mouseOffset: new Vec3(randomize(-1, 1) * 0.02)
+        mouseOffset: new Vec3(randomize(-1, 1) * 0.005)
       }
       this.points = line.points = []
 
@@ -42,7 +39,7 @@ export default class {
         vertex,
         uniforms: {
           uColor: { value: new Color(color) },
-          uThickness: { value: randomize(20, 50) }
+          uThickness: { value: randomize(10, 20) }
         }
       })
 
@@ -51,8 +48,6 @@ export default class {
       each(this.lines, l => l.polyline.resize())
       this.lines.push(line)
     })
-
-    // this.polyline.resize()
   }
 
   onMouseMove(e) {

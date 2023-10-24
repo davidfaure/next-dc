@@ -1,7 +1,6 @@
 import { map } from "lodash"
 import { gsap } from "gsap"
 import { Transform } from "ogl"
-import Prefix from "prefix"
 import Media from "./Media"
 
 import { data } from "../../../../data"
