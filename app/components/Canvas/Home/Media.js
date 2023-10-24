@@ -2,7 +2,6 @@ import { Mesh, Program } from "ogl"
 
 import vertex from "../../../shaders/gallery-vertex.glsl"
 import fragment from "../../../shaders/gallery-fragment.glsl"
-import { gsap } from "gsap"
 import Title from "./Title"
 import SubTitle from "./SubTitle"
 
@@ -35,8 +34,6 @@ export default class {
 
   createProgram() {
     this.program = new Program(this.gl, {
-      depthTest: false,
-      depthWrite: false,
       fragment,
       vertex,
       uniforms: {

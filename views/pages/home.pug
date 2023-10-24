@@ -7,8 +7,8 @@ block body
   .home
     .home__content
       section.home__hero
-        h1.home__hero__title=data.hero.title
-        span.home__hero__scroll (Scroll)
+        h1.home__hero__title(data-animation="paragraph")=data.hero.title
+        span.home__hero__scroll(data-animation="paragraph") (Scroll)
       section.home__description
           .home__description__box
             figure.home__description__media(data-animation="parallax")
@@ -16,7 +16,7 @@ block body
                 img.home__description__media__image(src=data.description.image alt=data.description.text)
             .home__description__box__text
               p.home__description__box__text__text(data-animation="paragraph")=data.description.text
-              .home__description__button
+              .home__description__button(data-animation="cursor")
                 button.home__description__button__wrapper
                   p.home__description__button__text
                     span.home__description__button__text__text See More
@@ -29,10 +29,10 @@ block body
               img.home__gallery__media__image(alt=image.title, src=image.image)
       section.home__quote(data-animation="scale")
         h1.home__quote__title(data-animation="reveal")=data.quote.text
-        figure.home__quote__media
+        figure.home__quote__media(data-animation="parallax")
           img.home__quote__media__image(alt=data.quote.text, src=data.quote.image)
       section.home__footer
-        .home__footer__title
+        .home__footer__title(data-animation="cursor")
           h1.home__footer__title__text(data-animation="paragraph") JARDEN
         .home__footer__contact
           .home__footer__contact__email__wrapper

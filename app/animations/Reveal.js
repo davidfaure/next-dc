@@ -3,8 +3,8 @@ import each from "lodash/each"
 import Animation from "classes/Animation"
 
 import { calculate, split } from "utils/text"
-import { splitIndividual } from "../utils/text"
 import gsap from "gsap"
+import { COLOR_GREEN, COLOR_WHITE } from "../utils/colors"
 
 export default class extends Animation {
   constructor({ element }) {
@@ -53,6 +53,7 @@ export default class extends Animation {
       opacity: 1,
       stagger: 0.02,
       duration: 0.2,
+      color: COLOR_GREEN,
       ease: "power2.out",
       delay: 0.2
     })
@@ -64,6 +65,7 @@ export default class extends Animation {
     gsap.to(this.elements.lines, {
       opacity: 0.1,
       duration: 0.2,
+      color: COLOR_WHITE,
       ease: "power2.in"
     })
   }

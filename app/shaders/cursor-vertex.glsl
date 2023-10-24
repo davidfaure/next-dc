@@ -21,7 +21,6 @@ vec4 getPosition() {
     float pixelWidth = 1.0 / (uResolution.y / uDPR);
     normal *= pixelWidth * uThickness;
 
-    // When the points are on top of each other, shrink the line to avoid artifacts.
     float dist = length(nextScreen - prevScreen);
     normal *= smoothstep(0.0, 0.02, dist);
 

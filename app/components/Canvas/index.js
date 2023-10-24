@@ -1,4 +1,4 @@
-import { Box, Camera, Renderer, Transform, Program, Mesh } from "ogl"
+import { Camera, Renderer, Transform } from "ogl"
 import Home from "./Home"
 import Cursor from "./Cursor"
 
@@ -77,7 +77,6 @@ export default class {
   }
 
   onChangeEnd(url) {
-    console.log(url, "url")
     if (url === "home") {
       this.createHome()
     } else {
@@ -114,11 +113,6 @@ export default class {
     this.viewport = {
       height,
       width
-    }
-
-    const values = {
-      screen: this.screen,
-      viewport: this.viewport
     }
 
     if (this.home) {
@@ -189,15 +183,6 @@ export default class {
   }
 
   onMouseMove(event) {
-    // if (event.changedTouches && event.changedTouches.length) {
-    //   event.x = event.changedTouches[0].pageX
-    //   event.y = event.changedTouches[0].pageY
-    // }
-    // if (event.x === undefined) {
-    //   event.x = event.pageX
-    //   event.y = event.pageY
-    // }
-
     const x = event.touches ? event.touches[0].clientX : event.clientX
     const y = event.touches ? event.touches[0].clientY : event.clientY
 

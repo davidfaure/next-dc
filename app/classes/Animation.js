@@ -17,22 +17,11 @@ export default class {
     this.createObserver()
 
     this.animateOut()
-
-    // if ('IntersectionObserver' in window) {
-    //   this.createObserver()
-
-    //   this.animateOut()
-    // } else {
-    //   this.animateIn()
-    // }
   }
 
   createObserver() {
     this.observer = new window.IntersectionObserver(entries => {
       entries.forEach(entry => {
-        // if (!this.isVisible && entry.isIntersecting) {
-        //   this.animateIn()
-        // }
         if (entry.isIntersecting) {
           this.animateIn()
         } else {
