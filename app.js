@@ -1,13 +1,27 @@
 require("dotenv").config()
 
 const app = require("./config")
+const { data } = require("./data")
+
+const handlePreloader = () => {
+  const assets = []
+
+  assets.push(data.hero.image, data.description.image, data.quote.image)
+  data.gallery.forEach(img => {
+    const { image } = img
+    assets.push(image)
+  })
+
+  return assets
+}
 
 app.listen(app.get("port"), () => {
   console.log(`listening on port ${app.get("port")}`)
 })
 
 app.get("/", (request, response) => {
-  response.render("pages/home")
+  const assets = handlePreloader()
+  response.render("pages/home", { data, assets })
 })
 
 app.get("/about", (request, response) => {

@@ -1,0 +1,13 @@
+#cursor {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  background-color: $color-green;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
+}

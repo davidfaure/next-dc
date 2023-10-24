@@ -1,26 +1,27 @@
-import each from 'lodash/each'
+import each from "lodash/each"
 
-import Animation from 'classes/Animation'
+import Animation from "classes/Animation"
 
-import { calculate, split } from 'utils/text'
+import { calculate, split } from "utils/text"
+import gsap from "gsap"
 
 export default class extends Animation {
-  constructor ({ element }) {
+  constructor({ element }) {
     const lines = []
-    const paragraphs = element.querySelectorAll('h1, h2, p')
+    const paragraphs = element.querySelectorAll("h1, h2, p")
 
     if (paragraphs.length !== 0) {
       each(paragraphs, element => {
         split({ element })
         split({ element })
 
-        lines.push(...element.querySelectorAll('span span'))
+        lines.push(...element.querySelectorAll("span span"))
       })
     } else {
       split({ element })
       split({ element })
 
-      lines.push(...element.querySelectorAll('span span'))
+      lines.push(...element.querySelectorAll("span span"))
     }
 
     super({
@@ -32,33 +33,44 @@ export default class extends Animation {
 
     this.onResize()
 
-    if ('IntersectionObserver' in window) {
+    if ("IntersectionObserver" in window) {
       this.animateOut()
     }
   }
 
-  animateIn () {
+  animateIn() {
     super.animateIn()
 
-    each(this.lines, (line, lineIndex) => {
-      each(line, word => {
-        word.style.transition = `transform 1.5s ${0.5 + lineIndex * 0.1}s ease`
-        word.style[this.transformPrefix] = 'translateY(0)'
-      })
-    })
-  }
+    this.timelineIn = gsap.timeline({ delay: 0.5 })
 
-  animateOut () {
-    super.animateOut()
+    this.timelineIn.set(this.element, { autoAlpha: 1 })
 
     each(this.lines, line => {
-      each(line, word => {
-        word.style[this.transformPrefix] = 'translateY(100%)'
-      })
+      this.timelineIn.fromTo(
+        line,
+        {
+          autoAlpha: 0,
+          y: "100%"
+        },
+        {
+          autoAlpha: 1,
+          duration: 1.4,
+          stagger: 0.06,
+          ease: "expo.out",
+          y: "0%"
+        },
+        0
+      )
     })
   }
 
-  onResize () {
+  animateOut() {
+    super.animateOut()
+
+    gsap.set(this.lines, { autoAlpha: 0 })
+  }
+
+  onResize() {
     this.lines = calculate(this.elements.lines)
   }
 }

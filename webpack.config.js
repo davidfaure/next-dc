@@ -3,6 +3,7 @@ const webpack = require("webpack")
 
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin")
 
 const IS_DEVELOPMENT = process.env.NODE_ENV === "dev"
 
@@ -46,6 +47,19 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
+    }),
+
+    new ImageMinimizerPlugin({
+      minimizer: {
+        implementation: ImageMinimizerPlugin.imageminMinify,
+        options: {
+          plugins: [
+            ["gifsicle", { interlaced: true }],
+            ["jpegtran", { progressive: true }],
+            ["optipng", { optimizationLevel: 8 }]
+          ]
+        }
+      }
     })
   ],
 
@@ -96,6 +110,15 @@ module.exports = {
             return "[hash].[ext]"
           }
         }
+      },
+
+      {
+        test: /\.(jpe?g|png|gif|svg|webp)$/i,
+        use: [
+          {
+            loader: ImageMinimizerPlugin.loader
+          }
+        ]
       },
 
       {

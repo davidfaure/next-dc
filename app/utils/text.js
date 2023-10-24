@@ -1,16 +1,76 @@
-import each from 'lodash/each'
+/* eslint-disable no-param-reassign */
+function splitText(text, expression) {
+  const splits = text.split("<br>")
 
-export function split ({ element, expression = ' ', append = true }) {
+  let words = []
+
+  splits.forEach((item, index) => {
+    if (index > 0) {
+      words.push("<br>")
+    }
+
+    words = words.concat(item.split(expression))
+
+    let isLink = false
+    let link = ""
+
+    const innerHTML = []
+
+    words.forEach(word => {
+      if (!isLink && (word.includes("<a") || word.includes("<strong"))) {
+        link = ""
+
+        isLink = true
+      }
+
+      if (isLink) {
+        link += ` ${word}`
+      }
+
+      if (isLink && (word.includes("/a>") || word.includes("/strong>"))) {
+        innerHTML.push(link)
+
+        link = ""
+      }
+
+      if (!isLink && link === "") {
+        innerHTML.push(word)
+      }
+
+      if (isLink && (word.includes("/a>") || word.includes("/strong>"))) {
+        isLink = false
+      }
+    })
+
+    words = innerHTML
+  })
+
+  return words
+}
+
+function parseLine(line) {
+  if (line === "") {
+    return line
+  }
+  if (line === " ") {
+    return "&nbsp;"
+  }
+  line = line.trim()
+
+  return line === "<br>" ? "<br>" : `<span>${line}</span>${line.length > 1 ? " " : ""}`
+}
+
+export function split({ element, expression = " ", append = true }) {
   const words = splitText(element.innerHTML.toString().trim(), expression)
 
-  let innerHTML = ''
+  let innerHTML = ""
 
-  each(words, line => {
-    if (line.indexOf('<br>') > -1) {
-      const lines = line.split('<br>')
+  words.forEach(line => {
+    if (line.indexOf("<br>") > -1) {
+      const lines = line.split("<br>")
 
-      each(lines, (line, index) => {
-        innerHTML += (index > 0) ? '<br>' + parseLine(line) : parseLine(line)
+      lines.forEach((line, index) => {
+        innerHTML += index > 0 ? `<br>${parseLine(line)}` : parseLine(line)
       })
     } else {
       innerHTML += parseLine(line)
@@ -19,14 +79,14 @@ export function split ({ element, expression = ' ', append = true }) {
 
   element.innerHTML = innerHTML
 
-  const spans = element.querySelectorAll('span')
+  const spans = element.querySelectorAll("span")
 
   if (append) {
-    each(spans, span => {
+    spans.forEach(span => {
       const isSingleLetter = span.textContent.length === 1
-      const isNotEmpty = span.innerHTML.trim() !== ''
-      const isNotAndCharacter = span.textContent !== '&'
-      const isNotDashCharacter = span.textContent !== '-'
+      const isNotEmpty = span.innerHTML.trim() !== ""
+      const isNotAndCharacter = span.textContent !== "&"
+      const isNotDashCharacter = span.textContent !== "-"
 
       if (isSingleLetter && isNotEmpty && isNotAndCharacter && isNotDashCharacter) {
         span.innerHTML = `${span.textContent}&nbsp;`
@@ -37,13 +97,13 @@ export function split ({ element, expression = ' ', append = true }) {
   return spans
 }
 
-export function calculate (spans) {
+export function calculate(spans) {
   const lines = []
   let words = []
 
   let position = spans[0].offsetTop
 
-  each(spans, (span, index) => {
+  spans.forEach((span, index) => {
     if (span.offsetTop === position) {
       words.push(span)
     }
@@ -63,63 +123,4 @@ export function calculate (spans) {
   })
 
   return lines
-}
-
-function splitText (text, expression) {
-  const splits = text.split('<br>')
-
-  let words = []
-
-  each(splits, (item, index) => {
-    if (index > 0) {
-      words.push('<br>')
-    }
-
-    words = words.concat(item.split(expression))
-
-    let isLink = false
-    let link = ''
-
-    const innerHTML = []
-
-    each(words, word => {
-      if (!isLink && (word.includes('<a') || word.includes('<strong'))) {
-        link = ''
-
-        isLink = true
-      }
-
-      if (isLink) {
-        link += ` ${word}`
-      }
-
-      if (isLink && (word.includes('/a>') || word.includes('/strong>'))) {
-        innerHTML.push(link)
-
-        link = ''
-      }
-
-      if (!isLink && link === '') {
-        innerHTML.push(word)
-      }
-
-      if (isLink && (word.includes('/a>') || word.includes('/strong>'))) {
-        isLink = false
-      }
-    })
-
-    words = innerHTML
-  })
-
-  return words
-}
-
-function parseLine (line) {
-  line = line.trim()
-
-  if (line === '' || line === ' ') {
-    return line
-  } else {
-    return (line === '<br>') ? '<br>' : `<span>${line}</span>` + ((line.length > 1) ? ' ' : '')
-  }
 }

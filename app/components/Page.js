@@ -1,19 +1,19 @@
-import AutoBind from 'auto-bind'
-import EventEmitter from 'events'
-import NormalizeWheel from 'normalize-wheel'
-import Prefix from 'prefix'
+import AutoBind from "auto-bind"
+import EventEmitter from "events"
+import NormalizeWheel from "normalize-wheel"
+import Prefix from "prefix"
 
-import Paragraph from 'animations/Paragraph'
+import Paragraph from "animations/Paragraph"
+import Reveal from "animations/Reveal"
+import Parallax from "animations/Parallax"
 
-import Detection from 'classes/Detection'
+import each from "lodash/each"
 
-import each from 'lodash/each'
-
-import { mapEach } from 'utils/dom'
-import { clamp, lerp } from 'utils/math'
+import { mapEach } from "utils/dom"
+import { clamp, lerp } from "utils/math"
 
 export default class extends EventEmitter {
-  constructor ({ classes, element, elements, isScrollable = true }) {
+  constructor({ classes, element, elements, isScrollable = true }) {
     super()
 
     AutoBind(this)
@@ -26,6 +26,8 @@ export default class extends EventEmitter {
       element,
       elements: {
         animationsParagraphs: '[data-animation="paragraph"]',
+        animationsReveal: '[data-animation="reveal"]',
+        animationsParallax: '[data-animation="parallax"]',
 
         ...elements
       }
@@ -41,10 +43,11 @@ export default class extends EventEmitter {
 
     this.isScrollable = isScrollable
 
-    this.transformPrefix = Prefix('transform')
+    this.transformPrefix = Prefix("transform")
+    console.log()
   }
 
-  create () {
+  create() {
     this.animations = []
 
     this.element = document.querySelector(this.selectors.element)
@@ -82,18 +85,30 @@ export default class extends EventEmitter {
   /**
    * Animations.
    */
-  createAnimations () {
+  createAnimations() {
     this.paragraphs = mapEach(this.elements.animationsParagraphs, element => {
       return new Paragraph({ element })
     })
 
     this.animations.push(...this.paragraphs)
+
+    this.revealsText = mapEach(this.elements.animationsReveal, element => {
+      return new Reveal({ element })
+    })
+
+    this.animations.push(...this.revealsText)
+
+    this.parallaxEffects = mapEach(this.elements.animationsParallax, element => {
+      return new Parallax({ element })
+    })
+
+    this.animations.push(...this.parallaxEffects)
   }
 
   /**
    * Animations.
    */
-  reset () {
+  reset() {
     this.scroll = {
       ease: 0.07,
       position: 0,
@@ -103,32 +118,32 @@ export default class extends EventEmitter {
     }
   }
 
-  set (value) {
+  set(value) {
     this.scroll.current = this.scroll.target = this.scroll.last = value
 
     this.transform(this.elements.wrapper, this.scroll.current)
   }
 
-  show (url) {
+  show(url) {
     this.isVisible = true
 
     return Promise.resolve()
   }
 
-  hide (url) {
+  hide(url) {
     this.isVisible = false
 
     return Promise.resolve()
   }
 
-  transform (element, y) {
+  transform(element, y) {
     element.style[this.transformPrefix] = `translate3d(0, ${-Math.round(y)}px, 0)`
   }
 
   /**
    * Events.
    */
-  onResize () {
+  onResize() {
     if (!this.elements.wrapper) return
 
     window.requestAnimationFrame(_ => {
@@ -140,17 +155,15 @@ export default class extends EventEmitter {
     })
   }
 
-  onTouchDown (event) {
-    if (!Detection.isMobile()) return
-
+  onTouchDown(event) {
     this.isDown = true
 
     this.scroll.position = this.scroll.current
     this.start = event.touches ? event.touches[0].clientY : event.clientY
   }
 
-  onTouchMove (event) {
-    if (!Detection.isMobile() || !this.isDown) return
+  onTouchMove(event) {
+    if (!this.isDown) return
 
     const y = event.touches ? event.touches[0].clientY : event.clientY
     const distance = (this.start - y) * 3
@@ -158,13 +171,11 @@ export default class extends EventEmitter {
     this.scroll.target = this.scroll.position + distance
   }
 
-  onTouchUp (event) {
-    if (!Detection.isMobile()) return
-
+  onTouchUp(event) {
     this.isDown = false
   }
 
-  onWheel (event) {
+  onWheel(event) {
     const normalized = NormalizeWheel(event)
     const speed = normalized.pixelY
 
@@ -176,7 +187,7 @@ export default class extends EventEmitter {
   /**
    * Frames.
    */
-  update () {
+  update() {
     this.scroll.target = clamp(0, this.scroll.limit, this.scroll.target)
 
     this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease)
@@ -186,10 +197,20 @@ export default class extends EventEmitter {
       this.scroll.current = 0
     }
 
+    if (this.selectors.elements.scroll) {
+      this.scrollPercentage = this.scroll.current / this.scroll.limit
+      this.elements.scroll.style[this.transformPrefix] = `scaleY(${this.scrollPercentage})`
+    }
+
     if (this.elements.wrapper) {
       this.transform(this.elements.wrapper, this.scroll.current)
     }
 
     this.scroll.last = this.scroll.current
+    if (this.parallaxEffects) {
+      each(this.parallaxEffects, effect => {
+        effect.update(this.scroll.current)
+      })
+    }
   }
 }

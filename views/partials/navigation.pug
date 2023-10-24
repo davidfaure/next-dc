@@ -1,3 +1,26 @@
 nav.navigation
-  a.navigation__link(href="/") Home
-  a.navigation__link(href="/about") About
+  .navigation__wrapper
+    .navigation__expanded
+      .navigation__expanded__wrapper
+        ul.navigation__expanded__wrapper__menu
+          each link in data.footer.link
+            li.navigation__expanded__wrapper__menu__li__wrapper(data-index=link.id)
+              .navigation__expanded__wrapper__menu__li
+                .navigation__expanded__wrapper__menu__li__no
+                  .navigation__expanded__wrapper__menu__li__no__wrap=`0${link.id}`
+                .navigation__expanded__wrapper__menu__li__name
+                  .navigation__expanded__wrapper__menu__li__name__wrap=link.text
+    .navigation__menu(data-animation="cursor")
+      button.navigation__menu__wrapper
+        p.navigation__menu__text
+          span.navigation__menu__text__text MENU
+        svg(viewBox="0 0 34 34")
+          polygon.navigation__menu__burger__line__top(points="9 14.5 25 14.5 25 15.5 9 15.5 9 15")
+          polygon.navigation__menu__burger__line__bottom(points="9 18.5 25 18.5 25 19.5 9 19.5 9 19")
+    a.navigation__link(href="/", data-animation="cursor") JARDEN
+    .navigation__cart(data-animation="cursor")
+      button.navigation__cart__wrapper
+        p.navigation__cart__text
+          span.navigation__cart__text__text CART
+        .navigation__cart__icon
+          img.navigation__cart__icon__image(alt="cart" src="/img/cart.png")

@@ -1,0 +1,52 @@
+.home__gallery {
+  height: 80rem;
+  margin: 20rem 0;
+  overflow: hidden;
+  position: relative;
+  background-color: $color-white;
+
+  &__wrapper {
+    align-items: center;
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translate(0%, -50%);
+    overflow: hidden;
+  }
+
+  &__media {
+    position: relative;
+    height: 63rem;
+    position: relative;
+
+    visibility: hidden;
+
+    width: 44.7rem;
+    border-radius: 1.6rem;
+    margin: 0 8rem;
+
+    &__image {
+      @extend %cover;
+
+      object-fit: cover;
+    }
+
+    &__description {
+      position: absolute;
+      bottom: 0;
+      left: 0%;
+      padding: 1.5rem 0;
+      &__subtitle {
+        @extend %text-16;
+        font-weight: 400;
+      }
+
+      &__title {
+        @extend %text-24;
+        font-weight: 500;
+        letter-spacing: 0rem;
+        margin-top: 1rem;
+      }
+    }
+  }
+}

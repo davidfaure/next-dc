@@ -14,16 +14,21 @@ import Home from "pages/Home"
 
 import Canvas from "components/Canvas"
 import Preloader from "components/Preloader"
+import Cursor from "./classes/Cursor"
+import Navigation from "./components/Navigation"
 
 class App {
   constructor() {
     AutoBind(this)
 
+    this.cursor = document.getElementById("cursor")
     this.content = document.querySelector(".content")
     this.template = this.content.dataset.template
 
-    this.createPreloader()
     this.createCanvas()
+    this.createCursor()
+    this.createPreloader()
+    this.createNavigation()
 
     this.pages = new Map()
     this.pages.set("about", new About())
@@ -31,26 +36,37 @@ class App {
 
     this.page = this.pages.get(this.template)
     this.page.create()
-    this.page.show()
 
     this.addEventListeners()
     this.addLinksEventsListeners()
   }
 
+  createCursor() {
+    this.cursor = new Cursor({ cursor: this.cursor, template: this.template })
+  }
+
+  createNavigation() {
+    this.navigation = new Navigation()
+  }
+
   createPreloader() {
-    this.preloader = new Preloader()
+    this.preloader = new Preloader({ canvas: this.canvas })
     this.preloader.on("complete", this.onPreloaded)
   }
 
   onPreloaded() {
+    this.page.show()
+    this.canvas.onPreloaded()
     this.onResize()
+
+    this.preloader.destroy()
 
     this.update()
   }
 
   createCanvas() {
     this.canvas = new Canvas({
-      url: this.url
+      url: this.template
     })
   }
 
@@ -126,11 +142,11 @@ class App {
     }
 
     if (this.page) {
-      this.page.update()
+      this.page.update(this.page.scroll)
     }
 
     if (this.canvas) {
-      this.canvas.update(this)
+      this.canvas.update(this, this.page.scroll)
     }
 
     if (this.stats) {
@@ -229,6 +245,16 @@ class App {
     }
   }
 
+  onMouseMove(event) {
+    if (this.cursor && this.cursor.handleCursorMove) {
+      this.cursor.handleCursorMove(event)
+    }
+
+    if (this.canvas && this.canvas.onTouchUp) {
+      this.canvas.onMouseMove(event)
+    }
+  }
+
   /**
    * Listeners.
    */
@@ -249,6 +275,8 @@ class App {
 
     window.addEventListener("keydown", this.onKeyDown)
     window.addEventListener("focusin", this.onFocusIn)
+
+    window.addEventListener("mousemove", this.onMouseMove)
 
     if (Detection.isMobile()) {
       window.oncontextmenu = this.onContextMenu
@@ -280,9 +308,9 @@ class App {
   }
 }
 
-const fontNeueHaas = new FontFaceObserver("Neue Haas Grotesk Regular")
+const fontNeueMontreal = new FontFaceObserver("PP Neue Montreal")
 
-Promise.all([fontNeueHaas.load()])
+Promise.all([fontNeueMontreal.load()])
   .then(_ => {
     window.APP = new App()
   })
